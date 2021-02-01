@@ -3,8 +3,9 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 // custom view variables
 var satellitePixelSize = 2;         // size of satellites in viewer
-var dataset = starlink;             // irridiumDebris, starlink
+var dataset = irridiumDebris;             // irridiumDebris, starlink
 var updateInterval = 50;            // default: 50
+var realtimeMinstep = 0.0015625
 var customMinstep = 0.0015625       // this correlates to simulation speed -- .016~ is 1 second
 
 var rotAngle = 0;                  // accrued rotation angle for the Earth
@@ -15,7 +16,7 @@ var datestep = 0;                  // day step
 // Declare orbital debris variables
 
 var debrisRecords = [];
-var datasetSize = dataset.length;
+var datasetSize = getDatasetSize()
 var posVel = [];          
 
 var viewer = new Cesium.Viewer('cesiumContainer', {
@@ -127,6 +128,30 @@ var longitudeStr = satellite.degreesLong(longitude),
     latitudeStr = satellite.degreesLat(latitude);
                     // positions and velocities of orbital debris
 
+function setMinstep(value) {
+    customMinstep = value
+}
+
+function chooseDataset(name) {
+    debrisRecords = []
+    dataset = []
+    viewer.entities.removeAll()
+    switch (name) {
+        case 'starlink':
+            dataset = starlink
+            break;
+        case 'iridium':
+            dataset = irridiumDebris // i know it's spelled wrong gimme a break
+            break;
+    }
+    datasetSize = getDatasetSize()
+    initiateSimulation();
+}
+
+function getDatasetSize() {
+    return dataset.length
+}
+
 function propagateOrbitalDebris() {
     var j = 0;
     for (i = 0; i < datasetSize; i++) {
@@ -162,6 +187,22 @@ function propagateOrbitalDebris() {
 
 
 function initiateSimulation() {
+
+
+    for (debrisID = 0; debrisID < dataset.length; debrisID++) {
+
+        thing[debrisID] = viewer.entities.add({
+            position: {
+                value: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
+                referenceFrame: Cesium.ReferenceFrame.FIXED
+            },
+            point: {
+                color: Cesium.Color.ALICEBLUE,
+                pixelSize: satellitePixelSize // ,
+            }
+        });
+    }// next debrisID
+
     propagateOrbitalDebris();
     startUpdate();
 }
@@ -255,25 +296,10 @@ function updatePosition() {
             thing[i].position = debrisPos;
         } //endif
     }//next i
-}; 
-
+};
 
 // -------------------------------------------------------------------------
 
-
-for (debrisID = 0; debrisID < dataset.length; debrisID++) {
-
-    thing[debrisID] = viewer.entities.add({
-        position: {
-            value: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
-            referenceFrame: Cesium.ReferenceFrame.FIXED
-        },
-        point: {
-            color: Cesium.Color.ALICEBLUE,
-            pixelSize: satellitePixelSize // ,
-        }
-    });
-}// next debrisID
 
 function icrf(scene, time) {
     if (scene.mode !== Cesium.SceneMode.SCENE3D) {   // may not be necessary
