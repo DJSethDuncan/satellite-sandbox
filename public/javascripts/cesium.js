@@ -5,6 +5,7 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 var satellitePixelSize = 2;         // size of satellites in viewer
 var dataset = starlink;             // irridiumDebris, starlink
 var updateInterval = 50;            // default: 50
+var customMinstep = 0.0015625   // this correlates to simulation speed -- .016~ is 1 second
 
 var rotAngle = 0;                  // accrued rotation angle for the Earth
 var minstep = 0;                   // minute step
@@ -195,6 +196,7 @@ function startUpdate() {
         } // endif 	
     } //next i
     setInterval(function () { updatePosition() }, updateInterval);
+    // updatePosition()
 };
 
 function updatePosition() {
@@ -210,15 +212,15 @@ function updatePosition() {
     if (minstep > 59) { hrstep = hrstep + 1; minstep = 0; }
     if (hrstep > 23) { datestep = datestep + 1; hrstep = 0; }
 
-    positionAndVelocity = satellite.propagate(
-        satrec,
-        now.getUTCFullYear(),
-        now.getUTCMonth() + 1, // Note, this function requires months in range 1-12.
-        now.getUTCDate() + datestep,
-        now.getUTCHours() + hrstep,
-        now.getUTCMinutes() + minstep,
-        now.getUTCSeconds()
-    );
+    // positionAndVelocity = satellite.propagate(
+    //     satrec,
+    //     now.getUTCFullYear(),
+    //     now.getUTCMonth() + 1, // Note, this function requires months in range 1-12.
+    //     now.getUTCDate() + datestep,
+    //     now.getUTCHours() + hrstep,
+    //     now.getUTCMinutes() + minstep,
+    //     now.getUTCSeconds()
+    // );
 
     // Propagate debris using time since epoch
     for (i = 0; i < datasetSize; i++) {
@@ -234,9 +236,10 @@ function updatePosition() {
             );
         }// endif
     } //next i
-    minstep = minstep + 0.1;
 
-    positionEci = positionAndVelocity.position;
+    minstep = minstep + customMinstep;
+
+    // positionEci = positionAndVelocity.position;
     satelliteX = positionEci.x;
     satelliteY = positionEci.y;
     satelliteZ = positionEci.z;
@@ -266,7 +269,7 @@ for (debrisID = 0; debrisID < dataset.length; debrisID++) {
             referenceFrame: Cesium.ReferenceFrame.FIXED
         },
         point: {
-            color: Cesium.Color.YELLOW,
+            color: Cesium.Color.ALICEBLUE,
             pixelSize: satellitePixelSize // ,
         }
     });
