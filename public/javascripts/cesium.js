@@ -5,7 +5,7 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 var satellitePixelSize = 2;         // size of satellites in viewer
 var dataset = starlink;             // irridiumDebris, starlink
 var updateInterval = 50;            // default: 50
-var customMinstep = 0.0015625   // this correlates to simulation speed -- .016~ is 1 second
+var customMinstep = 0.0015625       // this correlates to simulation speed -- .016~ is 1 second
 
 var rotAngle = 0;                  // accrued rotation angle for the Earth
 var minstep = 0;                   // minute step
