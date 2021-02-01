@@ -128,7 +128,8 @@ var longitudeStr = satellite.degreesLong(longitude),
     latitudeStr = satellite.degreesLat(latitude);
                     // positions and velocities of orbital debris
 
-function setMinstep(value) {
+function setCustomMinstep(value) {
+    minstep = 0
     customMinstep = value
 }
 
