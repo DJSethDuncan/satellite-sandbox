@@ -6,8 +6,8 @@
 
 ## Setup
 
-* git clone
-* npm i
-* npm start
+* `git clone`
+* `npm i`
+* `npm start`
 
 Sat data is sourced from [Celestrak](https://celestrak.com/) and stored in .js arrays in the `/javascripts` folder.
