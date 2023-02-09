@@ -1,3 +1,4 @@
+// @TODO move this token to an env
 // Your access token can be found at: https://cesium.com/ion/tokens.
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NzI3YjFlOS03YWQ2LTQ0YjQtYmMwYS1lNmVkODU2ZWJlZGYiLCJpZCI6NDMwMDIsImlhdCI6MTYxMjEzODc0Nn0.jAnKhvAScH8REg8fwJHrU8jSupWcb9jEL1sIp-Wen_I";
@@ -156,7 +157,7 @@ function getDatasetSize() {
   return dataset.length;
 }
 
-function propagateOrbitalDebris() {
+async function propagateOrbitalDebris() {
   var j = 0;
   for (i = 0; i < datasetSize; i++) {
     var tle1 = dataset[j];
