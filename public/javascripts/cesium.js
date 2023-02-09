@@ -175,7 +175,7 @@ function propagateOrbitalDebris() {
 
   // Propagate debris using time since epoch
   for (i = 0; i < datasetSize; i++) {
-    if (debrisRecords[i] != undefined) {
+    if (debrisRecords[i] != undefined && !debrisRecords[i].error) {
       posVel[i] = satellite.sgp4(debrisRecords[i], timeSinceTleEpochMinutes);
     }
   }
@@ -284,7 +284,7 @@ function updatePosition() {
 
   // Propagate debris using time since epoch
   for (i = 0; i < datasetSize; i++) {
-    if (debrisRecords[i] != undefined) {
+    if (debrisRecords[i] != undefined && !debrisRecords[i].error) {
       posVel[i] = satellite.propagate(
         debrisRecords[i],
         now.getUTCFullYear(),
@@ -307,7 +307,7 @@ function updatePosition() {
   var km = 1000; //3185.5 ; // 6371 ;
   var debrisPos = new Cesium.Cartesian3(0, 0, 0);
   for (i = 0; i < datasetSize; i++) {
-    if (posVel[i] != undefined) {
+    if (posVel[i] != undefined && "position" in posVel[i]) {
       debrisPos.x = posVel[i].position.x * km;
       debrisPos.y = posVel[i].position.y * km;
       debrisPos.z = posVel[i].position.z * km;
