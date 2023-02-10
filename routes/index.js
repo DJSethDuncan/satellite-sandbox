@@ -1,9 +1,13 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+var getData = require("../repositories/getData");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Satellite Sandbox' });
+router.get("/", async function (req, res, next) {
+  const starlinkTLEs = await getData.starlink();
+  res.render("index", {
+    title: "Satellite Sandbox",
+    starlinkTLEs: JSON.stringify(starlinkTLEs), // necessary because of pug I guess
+  });
 });
 
 module.exports = router;
