@@ -1,11 +1,13 @@
 var express = require("express");
 var router = express.Router();
+var getData = require("../repositories/getData");
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  // @TODO import TLE data here and pass it to the render page as a string I guess?
-
-  res.render("index", { title: "Satellite Sandbox" });
+router.get("/", async function (req, res, next) {
+  const starlinkTLEs = await getData.starlink();
+  res.render("index", {
+    title: "Satellite Sandbox",
+    starlinkTLEs: JSON.stringify(starlinkTLEs), // necessary because of pug I guess
+  });
 });
 
 module.exports = router;

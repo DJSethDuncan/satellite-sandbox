@@ -5,7 +5,8 @@ Cesium.Ion.defaultAccessToken =
 
 // custom view variables
 var satellitePixelSize = 2; // size of satellites in viewer
-var dataset = irridiumDebris; // irridiumDebris, starlink
+// var dataset = starlink; // irridiumDebris, starlink
+var dataset = starlinkTLEs;
 var updateInterval = 50; // default: 50
 var realtimeMinstep = 0.0015625;
 var customMinstep = 0.0015625; // this correlates to simulation speed -- .016~ is 1 second
@@ -159,20 +160,10 @@ function getDatasetSize() {
 
 async function propagateOrbitalDebris() {
   var j = 0;
-  for (i = 0; i < datasetSize; i++) {
-    var tle1 = dataset[j];
-    var tle2 = dataset[j + 1];
-    //  console.log (tle1 + "  " + tle2) ;\
-    if (
-      typeof tle1 == "string" ||
-      tle1 instanceof String ||
-      typeof tle2 == "string" ||
-      tle2 instanceof String
-    ) {
-      debrisRecords[i] = satellite.twoline2satrec(tle1, tle2);
-    }
-    j = j + 2;
-  }
+
+  dataset.map((data) =>
+    debrisRecords.push(satellite.twoline2satrec(data.line1, data.line2))
+  );
 
   // Propagate debris using time since epoch
   for (i = 0; i < datasetSize; i++) {
@@ -244,7 +235,7 @@ function startUpdate() {
       thing[i].position = debrisPos;
       // debris.position = debrisPos ;
     } else {
-      console.error("Error with debris record:", debrisRecords[i]);
+      // console.error("Error with debris record:", debrisRecords[i]);
     }
   } //next i
   setInterval(function () {
