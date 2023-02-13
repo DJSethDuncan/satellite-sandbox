@@ -11,5 +11,6 @@
 * `git clone`
 * `npm i`
 * `npm start`
+* `localhost:3001`
 
 Sat data is sourced from [Celestrak](https://celestrak.com/) and stored in .js arrays in the `/javascripts` folder.
